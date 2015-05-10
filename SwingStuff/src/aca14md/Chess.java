@@ -28,7 +28,7 @@ public class Chess {
 		String nameTwo = UsefulCode.getConsoleInput();
 		
 		// Both players
-		Player playerOne = new AgressivePlayer(nameOne, white, board, null);
+		Player playerOne = new HumanPlayer(nameOne, white, board, null);
 		Player playerTwo = new RandomPlayer(nameTwo, black, board, null);
 		
 		// Set both opponents
@@ -64,22 +64,21 @@ public class Chess {
 					
 			}
 			
+			// Get last move made			
 			Move lastMove = movesMade.get(movesMade.size() - 1);
 			
 			// Showing board and updating game
 			display.showPiecesOnBoard(board.getData());
 			gui.updateMove(lastMove.getXFrom(), lastMove.getYFrom(), lastMove.getXTo(), lastMove.getYTo());
-			//gui.showPiecesOnBoard(board.getData());
+			//gui.showPiecesOnBoard(board.getData()); MAKE SURE NO PROBLEMS
 			turn++;
-			gameOver = UsefulCode.isGameOver(playerOne.getPieces(), 
-											 playerTwo.getPieces());
 			
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
+			/* TESTING FOR CHECK AND MATE */
+			if(player.getOpponent().isCheck(null))
+				gameOver = player.getOpponent().isMate();
+			/* TESTInG ENDS */
+			
 		}
 		
 		// Gameover therefore show winner
