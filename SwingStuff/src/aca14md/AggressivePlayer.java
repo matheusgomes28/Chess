@@ -2,9 +2,9 @@ package aca14md;
 
 import java.util.ArrayList;
 
-public class AgressivePlayer extends RandomPlayer {
+public class AggressivePlayer extends RandomPlayer {
 
-	public AgressivePlayer(String n, Pieces p, Board b, Player o) {
+	public AggressivePlayer(String n, Pieces p, Board b, Player o) {
 		super(n, p, b, o);
 	}
 	

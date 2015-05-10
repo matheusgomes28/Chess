@@ -28,8 +28,8 @@ public class Chess {
 		String nameTwo = UsefulCode.getConsoleInput();
 		
 		// Both players
-		Player playerOne = new HumanPlayer(nameOne, white, board, null);
-		Player playerTwo = new RandomPlayer(nameTwo, black, board, null);
+		Player playerOne = new RandomPlayer(nameOne, white, board, null);
+		Player playerTwo = new AggressivePlayer(nameTwo, black, board, null);
 		
 		// Set both opponents
 		playerOne.setOpponent(playerTwo);
@@ -38,45 +38,61 @@ public class Chess {
 		// Other vars needed for the game mechanics
 		Player player = null; // null neded to compile...
 		int turn = 0;
-		boolean gameOver = false;
+		boolean checkMate = false,
+				staleMate = false;
 		
 		showHelp(); // Show initial help
 		display.showPiecesOnBoard(board.getData());
 		gui.setVisible(true);
 		gui.showPiecesOnBoard(board.getData());
 		
-		while(!gameOver){
+		while(!(checkMate || staleMate)){
 			
 			// Alternate turns
 			if(turn % 2 == 0) player = playerOne;
 			else player = playerTwo;
 			
-			// bool to check valid move
-			boolean validMove = false;
-			while(!validMove){
-				System.out.println(player+"'s turn. ");
-				
-				if(player.getClass() == HumanPlayer.class){
-					validMove = ((HumanPlayer) player).makeGUIMove(gui);
-				}
-				else
-					validMove = player.makeMove();
+			
+			/* TESTING FOR STALE-MATE USING NULL POINTERS */
+			try{
+				// bool to check valid move
+				boolean validMove = false;
+				while(!validMove){
+					System.out.println(player+"'s turn. ");
 					
+					if(player.getClass() == HumanPlayer.class){
+						validMove = ((HumanPlayer) player).makeGUIMove(gui);
+					}
+					else
+						validMove = player.makeMove();
+						
+				}
 			}
+			catch(NullPointerException e){
+				System.out.println("This is a typical stale-mate! Game is a draw.");
+				staleMate = true;
+			}
+			/* END TESTING FOR STALE MATE */
+			
 			
 			// Get last move made			
 			Move lastMove = movesMade.get(movesMade.size() - 1);
 			
 			// Showing board and updating game
 			display.showPiecesOnBoard(board.getData());
-			gui.updateMove(lastMove.getXFrom(), lastMove.getYFrom(), lastMove.getXTo(), lastMove.getYTo());
-			//gui.showPiecesOnBoard(board.getData()); MAKE SURE NO PROBLEMS
+			System.out.println(lastMove.getPiece());
+			System.out.println(lastMove);
+			
+			// Causes bugs when stale mate - o last move made
+			if(!staleMate)
+				gui.updateMove(lastMove.getXFrom(), lastMove.getYFrom(), lastMove.getXTo(), lastMove.getYTo());
+			
 			turn++;
 			
 			
 			/* TESTING FOR CHECK AND MATE */
 			if(player.getOpponent().isCheck(null))
-				gameOver = player.getOpponent().isMate();
+				checkMate = player.getOpponent().isMate();
 			/* TESTInG ENDS */
 			
 		}

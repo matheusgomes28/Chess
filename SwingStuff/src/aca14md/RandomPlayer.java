@@ -19,8 +19,6 @@ public class RandomPlayer extends Player {
 		
 		ArrayList<Move> allMoves = getLegalMoves();
 		
-		if(allMoves == null) return false;
-		
 		// Random number generator here
 		Random generator = new Random();
 		

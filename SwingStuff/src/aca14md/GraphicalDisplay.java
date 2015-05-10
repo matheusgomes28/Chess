@@ -164,6 +164,8 @@ public class GraphicalDisplay extends JFrame implements Display {
 	 */
 	public void updateMove(int xFrom, int yFrom, int xTo, int yTo){
 		
+		System.out.println(xFrom+","+(7-yFrom));
+		
 		// Get all components inside the cell
 		Component label = cellHolder[7-yFrom][xFrom].getComponent(0);
 		
