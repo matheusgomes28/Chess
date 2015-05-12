@@ -7,7 +7,7 @@ public class Chess {
 	// Moves made in the game... useful for check detection - IGNORE
 	public static ArrayList<Move> movesMade = new ArrayList<>();
 	
-	public static GraphicalDisplay gui = new GraphicalDisplay(500, 500);
+	public static GraphicalDisplay gui = new GraphicalDisplay(714, 500);
 	
 	public static void main(String[] args){
 		
@@ -22,11 +22,12 @@ public class Chess {
 		
 		// Get players names
 		System.out.println("Player one (white) enter name: ");
-		String nameOne = UsefulCode.getConsoleInput();
+		//String nameOne = UsefulCode.getConsoleInput();
+		String nameOne = "a";
 		System.out.println();
 		System.out.println("Player two (black) enter name: ");
-		String nameTwo = UsefulCode.getConsoleInput();
-		
+		//String nameTwo = UsefulCode.getConsoleInput();
+		String nameTwo = "b";
 		// Both players
 		Player playerOne = new RandomPlayer(nameOne, white, board, null);
 		Player playerTwo = new AggressivePlayer(nameTwo, black, board, null);
@@ -79,7 +80,6 @@ public class Chess {
 			Move lastMove = movesMade.get(movesMade.size() - 1);
 			
 			// Showing board and updating game
-			display.showPiecesOnBoard(board.getData());
 			System.out.println(lastMove.getPiece());
 			System.out.println(lastMove);
 			
@@ -127,7 +127,7 @@ public class Chess {
 						   +" while black pieces are represented with uppercase characters.");
 		System.out.println();
 		System.out.println("Press enter to continue...");
-		UsefulCode.getConsoleInput();
+		//UsefulCode.getConsoleInput();
 		System.out.println();
 	}
 }

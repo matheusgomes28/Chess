@@ -1,8 +1,13 @@
 package aca14md;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -30,6 +35,12 @@ public class GraphicalDisplay extends JFrame implements Display {
 	// Move string when making a move using the GUI 
 	private String moveStr = "";
 	
+	// JPanel to hold the chess board
+	private JPanel  board = new JPanel();
+	
+	// JPanel to hold the menu button, etc..
+	JPanel menu = new JPanel();
+	
 	
 	
 	/**
@@ -39,34 +50,80 @@ public class GraphicalDisplay extends JFrame implements Display {
 	 * @param height The height of the window
 	 * @param width The width of the window
 	 */
-	public GraphicalDisplay(int height, int width){
+	public GraphicalDisplay(int width, int height){
 		
 		
-		// Basic settings of the window
+		// Boiler code to set window settings
+		Dimension size = new Dimension(width, height);
 		Container contentPane = getContentPane();
+		contentPane.setLayout(new BorderLayout());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLayout(new GridLayout(8, 8));
+		contentPane.setSize(size);
+		contentPane.setPreferredSize(size);
 		
-		// Set constant size - not resizable
-		setResizable(false);
-		setSize(width, height);
+		// Board Settings
+		board.setLayout(new GridLayout(8, 8));
+		board.setSize((int)(0.7*size.getWidth()),(int)size.getHeight());
+		
+		// Menu settings
+		menu.setSize((int) (size.getWidth()*0.3), height);
+		menu.setBackground(Color.WHITE);
+		
+		
+		/* Adding each component with constraints */
+		contentPane.add(board);
+		contentPane.add(menu);
 		
 		
 		// Nested loop to set each cell
 		for(int i = 0; i < GRID_SIZE; i++){
 			for(int j = 0; j < GRID_SIZE; j++){
 				
-				// Add a pael to the cell
+				// Add a panel to the cell
 				cellHolder[i][j] = new JPanel();
 				
 				// Change colour of this panel
 				if((i+j) % 2 == 1)
-					cellHolder[i][j].setBackground(Color.GRAY);
+					cellHolder[i][j].setBackground(new Color(130, 82, 1));
+				else
+					cellHolder[i][j].setBackground(new Color(255, 189, 78));
 				
 				// Add panel to window				
-				contentPane.add(cellHolder[i][j]);
+				board.add(cellHolder[i][j]);
 			}
 		}
+		
+		setResizable(false);
+		pack();
+	}
+	
+	
+	/**
+	 * This is the class for a graphical interface
+	 * used to display the pieces in a window.
+	 * 
+	 * @param height The height of the window
+	 * @param width The width of the window
+	 */
+	public void showPiecesOnBoard(Piece[][] data) {
+		
+		System.out.println(board.getSize());
+		
+		// Going through each cell. i = y, j = x
+		for(int i = 0; i < GRID_SIZE; i++){
+			for(int j = 0; j < GRID_SIZE; j++){
+				
+				// Set piece if present, otherwise remove all components
+				if(data[j][i] != null)
+					setPieceToCell(7-i, j, data[j][i]);
+				else
+					cellHolder[7-i][j].removeAll();
+			}
+		}
+		
+		// Repaint screen		
+		revalidate();
+		repaint();
 	}
 	
 	
@@ -130,33 +187,6 @@ public class GraphicalDisplay extends JFrame implements Display {
 	
 	
 	/**
-	 * This is the class for a graphical interface
-	 * used to display the pieces in a window.
-	 * 
-	 * @param height The height of the window
-	 * @param width The width of the window
-	 */
-	public void showPiecesOnBoard(Piece[][] data) {
-		
-		// Going through each cell. i = y, j = x
-		for(int i = 0; i < GRID_SIZE; i++){
-			for(int j = 0; j < GRID_SIZE; j++){
-				
-				// Set piece if present, otherwise remove all components
-				if(data[j][i] != null)
-					setPieceToCell(7-i, j, data[j][i]);
-				else
-					cellHolder[7-i][j].removeAll();
-			}
-		}
-		
-		// Repaint screen		
-		revalidate();
-		repaint();
-	}
-	
-	
-	/**
 	 * This method is an improvement on the
 	 * core showPieceOnBoard method. It only 
 	 * repaints the cells changed in the GUI
@@ -207,6 +237,7 @@ public class GraphicalDisplay extends JFrame implements Display {
 							  ""+x+""+(7-y);
 					
 					//Unselect and remove all listeners
+					selectedPiece = null;
 					unselectMoves(p);
 				}
 			});
@@ -231,9 +262,12 @@ public class GraphicalDisplay extends JFrame implements Display {
 			int x = move.getXTo(),
 				y = 7-move.getYTo();
 			
-			// Change colour to green
-			if((x+y) % 2 == 1) cellHolder[y][x].setBackground(Color.GRAY);
-			else cellHolder[y][x].setBackground(getBackground());
+			// Change colour to normal
+			// Change colour of this panel
+			if((x+y) % 2 == 1)
+				cellHolder[y][x].setBackground(new Color(130, 82, 1));
+			else
+				cellHolder[y][x].setBackground(new Color(255, 189, 78));
 			
 			cellHolder[y][x].revalidate();
 			cellHolder[y][x].repaint();
