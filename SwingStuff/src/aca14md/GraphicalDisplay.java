@@ -229,18 +229,7 @@ public class GraphicalDisplay extends JFrame implements Display {
 				y = 7-move.getYTo();
 			
 			// Add listener that changes the move string
-			cellHolder[y][x].addMouseListener(new MouseAdapter(){
-				public void mouseClicked(MouseEvent e){
-					
-					// Update move String
-					moveStr = ""+p.getX()+""+p.getY()+
-							  ""+x+""+(7-y);
-					
-					//Unselect and remove all listeners
-					selectedPiece = null;
-					unselectMoves(p);
-				}
-			});
+			cellHolder[y][x].addMouseListener(new PieceListeners.CellListener(this, p, x, y));
 			
 			
 			// Change colour to green

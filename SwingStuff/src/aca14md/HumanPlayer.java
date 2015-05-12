@@ -158,8 +158,6 @@ public class HumanPlayer extends Player {
 		
 		// Get all player's pieces
 		Pieces myPieces = getPieces();
-	
-		
 		
 		// Loop to add listeners to every piece on board
 		for(int i = 0; i < myPieces.getNumPieces(); i++){
@@ -167,6 +165,7 @@ public class HumanPlayer extends Player {
 			// Current piece and position
 			Piece piece = myPieces.getPiece(i);
 			
+			// Only selects if it has moves
 			if(piece.availableMoves() != null){
 				int x = piece.getX(),
 						y = 7 - piece.getY();
@@ -174,30 +173,8 @@ public class HumanPlayer extends Player {
 					// JLabel representing piece
 					JLabel label = (JLabel) cellHolder[y][x].getComponent(0);
 					
-					label.addMouseListener(new MouseAdapter(){
-						
-						public void mouseClicked(MouseEvent e){
-							
-							if(gui.getSelectedPiece() != null){
-								// Unselect previous moves if needed
-								gui.unselectMoves(gui.getSelectedPiece());
-								
-								// Select or unselect this pieces moves
-								if(gui.getSelectedPiece() != piece){
-									gui.selectMoves(piece);
-									gui.setSelectedPiece(piece);
-								}
-								else // Piece was just unselected
-									gui.setSelectedPiece(null);
-							}
-							else{
-								gui.selectMoves(piece);
-								gui.setSelectedPiece(piece);
-							}
-							
-						}
-						
-					});
+					// Add the listener class from PieceListeners class - read class
+					label.addMouseListener(new PieceListeners.PieceListener(gui, piece));
 			}
 		}
 	}
