@@ -29,8 +29,8 @@ public class Chess {
 		//String nameTwo = UsefulCode.getConsoleInput();
 		String nameTwo = "b";
 		// Both players
-		Player playerOne = new RandomPlayer(nameOne, white, board, null);
-		Player playerTwo = new AggressivePlayer(nameTwo, black, board, null);
+		Player playerOne = new HumanPlayer(nameOne, white, board, null);
+		Player playerTwo = new HumanPlayer(nameTwo, black, board, null);
 		
 		// Set both opponents
 		playerOne.setOpponent(playerTwo);
