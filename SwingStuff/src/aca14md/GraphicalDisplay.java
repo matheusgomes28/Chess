@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -29,17 +30,17 @@ public class GraphicalDisplay extends JFrame implements Display {
 	// CellHolder
 	JPanel[][] cellHolder = new JPanel[GRID_SIZE][GRID_SIZE];
 	
-	// Piece currently selected
-	Piece selectedPiece = null;
-	
-	// Move string when making a move using the GUI 
-	private String moveStr = "";
-	
 	// JPanel to hold the chess board
 	private JPanel  board = new JPanel();
 	
 	// JPanel to hold the menu button, etc..
-	JPanel menu = new JPanel();
+	UserMenu menu;
+	
+	
+	
+	// Get methods needed
+	public UserMenu getMenu(){return menu;}
+	public JPanel getBoard(){return board;} // MIGHT NOT NEED IT
 	
 	
 	
@@ -62,17 +63,23 @@ public class GraphicalDisplay extends JFrame implements Display {
 		contentPane.setPreferredSize(size);
 		
 		// Board Settings
+		Dimension boardSize  = new Dimension(height, height);
 		board.setLayout(new GridLayout(8, 8));
-		board.setSize((int)(0.7*size.getWidth()),(int)size.getHeight());
+		board.setSize(boardSize);
+		System.out.println("Board size");
+		System.out.println(board.getSize());
 		
 		// Menu settings
-		menu.setSize((int) (size.getWidth()*0.3), height);
-		menu.setBackground(Color.WHITE);
+		menu = new UserMenu((int) (0.3*size.width), size.height);
 		
 		
 		/* Adding each component with constraints */
-		contentPane.add(board);
-		contentPane.add(menu);
+		contentPane.add(menu, BorderLayout.LINE_END);
+		contentPane.add(board, BorderLayout.LINE_START);
+		
+		System.out.println("Menu size");
+		System.out.println(menu.getSize());
+
 		
 		
 		// Nested loop to set each cell
@@ -93,12 +100,15 @@ public class GraphicalDisplay extends JFrame implements Display {
 			}
 		}
 		
+		System.out.println("Board size");
+		System.out.println(board.getSize());
+		
 		setResizable(false);
 		pack();
 	}
 	
 	
-	/**
+	/** COMMENT HERE
 	 * This is the class for a graphical interface
 	 * used to display the pieces in a window.
 	 * 
@@ -106,8 +116,6 @@ public class GraphicalDisplay extends JFrame implements Display {
 	 * @param width The width of the window
 	 */
 	public void showPiecesOnBoard(Piece[][] data) {
-		
-		System.out.println(board.getSize());
 		
 		// Going through each cell. i = y, j = x
 		for(int i = 0; i < GRID_SIZE; i++){
@@ -127,26 +135,8 @@ public class GraphicalDisplay extends JFrame implements Display {
 	}
 	
 	
-	
-	public JPanel[][] getCellHolder(){
-		return cellHolder;
-	}
-	
-	public String getMoveString(){
-		return moveStr;
-	}
-	
-	public Piece getSelectedPiece(){
-		return selectedPiece;
-	}
-	
-	public void setSelectedPiece(Piece p){
-		selectedPiece = p;
-	}
-	
-	public void setMoveString(String s){
-		moveStr = s;
-	}
+	// Get methods needed
+	public JPanel[][] getCellHolder(){return cellHolder;}
 	
 	/**
 	 * This method will set the piece to a 
@@ -212,75 +202,4 @@ public class GraphicalDisplay extends JFrame implements Display {
 		cellHolder[7-yFrom][xFrom].revalidate();
 		cellHolder[7-yFrom][xFrom].repaint();
 	}
-	
-	
-	public void selectMoves(Piece p){
-		
-		// Change state of move string
-		moveStr = "";
-		
-		// Get available moves of a piece
-		ArrayList<Move> moves = p.availableMoves();
-		
-		// Loop to highlight pieces
-		for(Move move : moves){
-			// Positions to hightlight
-			int x = move.getXTo(),
-				y = 7-move.getYTo();
-			
-			// Add listener that changes the move string
-			cellHolder[y][x].addMouseListener(new PieceListeners.CellListener(this, p, x, y));
-			
-			
-			// Change colour to green
-			cellHolder[y][x].setBackground(Color.GREEN);
-			cellHolder[y][x].revalidate();
-			cellHolder[y][x].repaint();
-		}
-	}
-	
-	
-	public void unselectMoves(Piece p){
-		
-		// Get available moves of a piece
-		ArrayList<Move> moves = p.availableMoves();
-		
-		// Loop to highlight pieces
-		if(moves != null) for(Move move : moves){
-			// Positions to highlight
-			int x = move.getXTo(),
-				y = 7-move.getYTo();
-			
-			// Change colour to normal
-			// Change colour of this panel
-			if((x+y) % 2 == 1)
-				cellHolder[y][x].setBackground(new Color(130, 82, 1));
-			else
-				cellHolder[y][x].setBackground(new Color(255, 189, 78));
-			
-			cellHolder[y][x].revalidate();
-			cellHolder[y][x].repaint();
-			
-			// Clear listeners that might have been added.
-			clearMoveListeners(p);
-		}
-	}
-	
-		
-	public void clearMoveListeners(Piece piece){
-		
-		for(Move move : piece.availableMoves()){
-			
-			// Get position to remove listeners
-			int x = move.getXTo(),
-				y = 7-move.getYTo();
-			
-			// Boiler code to remove all mouse listeners in a component
-			MouseListener[] listeners = cellHolder[y][x].getMouseListeners();
-			for(MouseListener listener : listeners)
-				cellHolder[y][x].removeMouseListener(listener);
-			
-		}
-	}
-
 }

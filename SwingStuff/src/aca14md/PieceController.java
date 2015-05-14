@@ -18,24 +18,29 @@ import javax.swing.JPanel;
  */
 public class PieceController {
 	
-	// The move string acquired after a move
-	private String moveStr;
-	
+	// Variables to hold the view and model
 	private GraphicalDisplay view;
-	private HumanPlayer model;
+	private PieceModel model;
+	
+	public PieceController(PieceModel model, GraphicalDisplay view){
+		// Settings the instance variables
+		this.view = view;
+		this.model = model;
+	}
+	
 	/**
 	 * This method will be used to add
 	 * mouse listeners to every JLabel
 	 * that represents this player's 
 	 * pieces on the board
+	 * @param myPieces The pieces to be added listeners
+	 * to.
 	 */
-	public void addPieceListeners(){
+	public void addPieceListeners(Pieces myPieces){
 		
 		// Get the cell holder
 		JPanel[][] cellHolder = view.getCellHolder();
 		
-		// Get all player's pieces
-		Pieces myPieces = model.getPieces();
 				
 		// Loop to add listeners to every piece on board
 		for(int i = 0; i < myPieces.getNumPieces(); i++){
@@ -52,18 +57,16 @@ public class PieceController {
 					JLabel label = (JLabel) cellHolder[y][x].getComponent(0);
 					
 					// Add the listener class from PieceListeners class - read class
-					label.addMouseListener(new PieceListeners.PieceListener(view, piece));
+					label.addMouseListener(new PieceListeners.PieceListener(model, piece));
 			}
 		}
 	}
 	
-	
-	public void removePieceListeners(){
-		// Get the JPanel cellHolder
-		JPanel cellHolder[][] = gui.getCellHolder();
+	// COMMENT ON PIECES HERE
+	public void removePieceListeners(Pieces myPieces){
 		
-		// Get pieces that belong to player
-		Pieces myPieces = getPieces();
+		// Get the JPanel cellHolder
+		JPanel cellHolder[][] = view.getCellHolder();
 		
 		// Loop to remove all listeners of the pieces
 		for(int i = 0; i < myPieces.getNumPieces(); i++){
@@ -90,6 +93,36 @@ public class PieceController {
 					label.removeMouseListener(listener);
 			}
 		}
+	}
+	
+	
+	/**
+	 * This method uses the model and the
+	 * view to get a valid move string 
+	 * from the player.
+	 * @return
+	 */
+	public String getMoveString(){
+		addPieceListeners(model.getPieces());
+		
+		while(model.getMoveString().length() < 4){
+			try {
+				Thread.sleep(5);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		String input = model.getMoveString();
+		model.setMoveString("");
+		
+		if(model.getSelectedPiece() != null)
+			model.unselectMoves(model.getSelectedPiece());
+		
+		removePieceListeners(model.getPieces());
+		
+		return input;
 	}
 	
 }

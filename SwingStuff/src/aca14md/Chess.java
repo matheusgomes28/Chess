@@ -13,24 +13,24 @@ public class Chess {
 		
 		// Create object needed for the game
 		Board board = new Board();
-		TextDisplay display = new TextDisplay();
+		TextDisplay display = new TextDisplay();		
 		
 		// Both set of pieces, diff colour
 		Pieces white = new Pieces(board, PieceCode.WHITE);
 		Pieces black = new Pieces(board, PieceCode.BLACK);
 		
+		// Show stuff on board
+		display.showPiecesOnBoard(board.getData());
+		gui.setVisible(true);
+		gui.showPiecesOnBoard(board.getData());
 		
-		// Get players names
-		System.out.println("Player one (white) enter name: ");
-		//String nameOne = UsefulCode.getConsoleInput();
-		String nameOne = "a";
-		System.out.println();
-		System.out.println("Player two (black) enter name: ");
-		//String nameTwo = UsefulCode.getConsoleInput();
-		String nameTwo = "b";
+		// Create menu adapter to get menu settings
+		MenuAdapter menu = new MenuAdapter(gui.getMenu());
+		menu.waitStartButton();
+		
 		// Both players
-		Player playerOne = new HumanPlayer(nameOne, white, board, null);
-		Player playerTwo = new HumanPlayer(nameTwo, black, board, null);
+		Player playerOne = menu.getPlayerOne(white, board);
+		Player playerTwo = menu.getPlayerTwo(black, board);
 		
 		// Set both opponents
 		playerOne.setOpponent(playerTwo);
@@ -41,11 +41,6 @@ public class Chess {
 		int turn = 0;
 		boolean checkMate = false,
 				staleMate = false;
-		
-		showHelp(); // Show initial help
-		display.showPiecesOnBoard(board.getData());
-		gui.setVisible(true);
-		gui.showPiecesOnBoard(board.getData());
 		
 		while(!(checkMate || staleMate)){
 			
@@ -59,7 +54,7 @@ public class Chess {
 				// bool to check valid move
 				boolean validMove = false;
 				while(!validMove){
-					System.out.println(player+"'s turn. ");
+					menu.setMessage(player+"'s turn. ");
 					
 					if(player.getClass() == HumanPlayer.class){
 						validMove = ((HumanPlayer) player).makeGUIMove(gui);
@@ -97,37 +92,10 @@ public class Chess {
 			
 		}
 		
-		// Gameover therefore show winner
-		System.out.println("Congratulations!!! "+player+" has won the game.");
-	}
-	
-	/**
-	 * This method simply prints out text to the 
-	 * console in order to help the user
-	 * play the game. Mainly created to make code
-	 * more readable.
-	 */
-	public static void showHelp(){
-		System.out.println();
-		System.out.println("### Chess Help ###");
-		System.out.println();
-		System.out.println("1 - Movements are in the form LetterNumberLetterNumber"
-				           +" (E.g A1A2 - move pawn in A1 to A2).");
-		System.out.println("2 - Spaces in the inputs are allowed, meaning that"
-						   +"'A 2 A 4' = 'A  2A4'.");
-		System.out.println("3 - The first coordinate represents the piece you chose to"
-						   +"move and the second is the place to move to. E.g. "
-						   + "'A2A3 means move piece in rank A file 2 to rank A "
-						   + "file 3");
-		System.out.println("4 - Black pieces will be at the top while the white "
-						   +"pieces are initially located at the bottom of the board");
-		System.out.println("5 - Pieces are represented with their first letter (with the "+
-						   "exception of knights which are represented with the letter n.");
-		System.out.println("6 - White pieces are represented with lowercase characters"
-						   +" while black pieces are represented with uppercase characters.");
-		System.out.println();
-		System.out.println("Press enter to continue...");
-		//UsefulCode.getConsoleInput();
-		System.out.println();
+		// Gameover therefore show winner/draw
+		if(staleMate)
+			menu.setMessage("Stale Mate! It's a draw.");
+		else
+			menu.setMessage("Congratulations!!! "+player+" has won the game.");
 	}
 }

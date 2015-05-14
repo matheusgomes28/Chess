@@ -30,15 +30,15 @@ public class PieceListeners {
 	public static class PieceListener extends MouseAdapter {
 		
 		// Instances needed for the listener to work
-		GraphicalDisplay gui;
+		private PieceModel model;
 		
 		// Piece that owns the listener
 		Piece piece;
 		
-		public PieceListener(GraphicalDisplay gui, Piece piece){
+		public PieceListener(PieceModel model, Piece piece){
 			// Boiler code to initialise fields
 			this.piece = piece;
-			this.gui = gui;
+			this.model = model;
 		}
 		
 		
@@ -48,22 +48,22 @@ public class PieceListeners {
 		 * of a piece on the board.
 		 */
 		public void mouseClicked(MouseEvent e){
-			
-			if(gui.getSelectedPiece() != null){
+			// COMMENT HERE MATE
+			if(model.getSelectedPiece() != null){
 				// Unselect previous moves if needed
-				gui.unselectMoves(gui.getSelectedPiece());
+				model.unselectMoves(model.getSelectedPiece());
 				
 				// Select or unselect this pieces moves
-				if(gui.getSelectedPiece() != piece){
-					gui.selectMoves(piece);
-					gui.setSelectedPiece(piece);
+				if(model.getSelectedPiece() != piece){
+					model.selectMoves(piece);
+					model.setSelectedPiece(piece);
 				}
 				else // Piece was just unselected
-					gui.setSelectedPiece(null);
+					model.setSelectedPiece(null);
 			}
 			else{
-				gui.selectMoves(piece);
-				gui.setSelectedPiece(piece);
+				model.selectMoves(piece);
+				model.setSelectedPiece(piece);
 			}
 			
 		}
@@ -84,16 +84,16 @@ public class PieceListeners {
 		// Piece that contains moves to be listened
 		private Piece piece;
 		
-		// GUI containing the pieces
-		private GraphicalDisplay gui;
+		// Model containing the piece data
+		private PieceModel model;
 		
 		// X, Y position of cell
 		int x, y;
 		
 		
-		public CellListener(GraphicalDisplay gui, Piece piece, int x, int y){
+		public CellListener(PieceModel model, Piece piece, int x, int y){
 			// Boiler code to initialise fields
-			this.gui = gui;
+			this.model = model;
 			this.piece = piece;
 			this.x = x;
 			this.y = y;
@@ -109,11 +109,11 @@ public class PieceListeners {
 		public void mouseClicked(MouseEvent e){
 			
 			// Update move String
-			gui.setMoveString(""+piece.getX()+""+piece.getY()+""+x+""+(7-y)); 
+			model.setMoveString(""+piece.getX()+""+piece.getY()+""+x+""+(7-y)); 
 			
 			//Unselect and remove all listeners
-			gui.selectedPiece = null;
-			gui.unselectMoves(piece);
+			model.selectedPiece = null;
+			model.unselectMoves(piece);
 		}
 	}
 }

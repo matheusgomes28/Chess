@@ -10,8 +10,15 @@ import javax.swing.JPanel;
 
 public class HumanPlayer extends Player {
 	
+	private GraphicalDisplay view;
+	private PieceModel model;
+	private PieceController controller;
+	
 	public HumanPlayer(String n, Pieces p, Board b, Player o){
 		super(n, p, b, o);
+		view = Chess.gui;
+		model = new PieceModel(getPieces(), view.getCellHolder());
+		controller = new PieceController(model, view);
 	}
 
 	/**
@@ -97,23 +104,8 @@ public class HumanPlayer extends Player {
 	
 	public boolean makeGUIMove(GraphicalDisplay gui){
 		
-		addListeners(Chess.gui);
-		
-		while(gui.getMoveString() == ""){
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		removeListeners(gui);
-		
-		// VERY IMPORTNT TO RESET
-		String moveString = gui.getMoveString();
-		gui.setMoveString("");
-		
-		
+		// Use controller to get move string
+		String moveString = controller.getMoveString();
 		
 		// Get position information from move string
 		int xFrom = Integer.parseInt(moveString.substring(0, 1)),
@@ -148,70 +140,6 @@ public class HumanPlayer extends Player {
 		else{
 			System.out.println("Move chosen is illegal. Can't get into check");
 			return false;
-		}
-	}
-	
-	public void addListeners(GraphicalDisplay gui){
-		
-		// Get the cell holder
-		JPanel[][] cellHolder = gui.getCellHolder();
-		
-		// Get all player's pieces
-		Pieces myPieces = getPieces();
-		
-		// Loop to add listeners to every piece on board
-		for(int i = 0; i < myPieces.getNumPieces(); i++){
-			
-			// Current piece and position
-			Piece piece = myPieces.getPiece(i);
-			
-			// Only selects if it has moves
-			if(piece.availableMoves() != null){
-				int x = piece.getX(),
-						y = 7 - piece.getY();
-					
-					// JLabel representing piece
-					JLabel label = (JLabel) cellHolder[y][x].getComponent(0);
-					
-					// Add the listener class from PieceListeners class - read class
-					label.addMouseListener(new PieceListeners.PieceListener(gui, piece));
-			}
-		}
-	}
-	
-	
-	public void removeListeners(GraphicalDisplay gui){
-		
-		// Get the JPanel cellHolder
-		JPanel cellHolder[][] = gui.getCellHolder();
-		
-		// Get pieces that belong to player
-		Pieces myPieces = getPieces();
-		
-		// Loop to remove all listeners of the pieces
-		for(int i = 0; i < myPieces.getNumPieces(); i++){
-			
-			// Get current piece
-			Piece piece = myPieces.getPiece(i);
-			
-			// Only has listeners if has moves
-			if(piece.availableMoves() != null){
-				
-				// Get position to be removed
-				int x = piece.getX(),
-					y = 7 - piece.getY();
-				
-				// Get the only label representing piece
-				JLabel label = (JLabel) cellHolder[y][x].getComponent(0);
-				
-				// Get mouse listeners to be removed
-				MouseListener[] listeners = label.getMouseListeners();
-				
-				// Shows error if there's no mouse listener (expected to be 1);
-				if(listeners.length == 0 ) System.out.println("erro, no listeners");
-				else for(MouseListener listener : listeners)
-					label.removeMouseListener(listener);
-			}
 		}
 	}
 }

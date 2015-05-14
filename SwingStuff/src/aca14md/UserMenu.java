@@ -1,56 +1,65 @@
 package aca14md;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
-
-import layout.TableLayout;
 
 import javax.swing.*;
 
-public class UserInterface extends JFrame {
+public class UserMenu extends JPanel {
 	
+	// Instance variables needed to set settings
+	private JComboBox<String> typeOne, typeTwo;
+	private JTextField nameTwo, nameOne;
+	private JButton startButton;
+	private JLabel gameMessage;
 	
-	public UserInterface(int height){
+	// Get methods needed
+	public Object getPlayerOneType(){return typeOne.getSelectedItem();}
+	public Object getPlayerTwoType(){return typeTwo.getSelectedItem();}
+	public String getPlayerOneName(){return nameOne.getText();}
+	public String getPlayerTwoName(){return nameTwo.getText();}
+	public JButton getStartButton(){return startButton;}
+	public JLabel getMessageLabel(){return gameMessage;}
+	
+	public UserMenu(int width, int height){
 		
 		// Boiler code for settings
-		Dimension size = new Dimension((int) (height*4/7.0), height);
-		Container contentPane = getContentPane();
-		contentPane.setPreferredSize(size); // Size for packing
-		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
+		Dimension size = new Dimension(width, height);
+		setSize(size);
+		setPreferredSize(size); // Size for packing
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		
+		
 		
 		// Size for every part of the UI
 		Dimension panelSize = new Dimension((int) (size.width*0.9), size.height/4);
 		
-		
 		// Create the logo Test/Image
 		JLabel logo = new JLabel("Chess Game");
 		logo.setFont(new Font(logo.getFont().getName(), Font.BOLD, 32));
-		logo.setAlignmentX(contentPane.CENTER_ALIGNMENT);
-		logo.setForeground(new Color(255, 189, 78));
+		logo.setAlignmentX(CENTER_ALIGNMENT);
 		logo.setSize(panelSize);
-		contentPane.add(logo);
+		add(logo);
 		
-		// JPanel to hold each player's options
+		// JPanel to hold certain areas of the menu
 		JPanel playerOneOptions = new JPanel();
 		JPanel playerTwoOptions = new JPanel();
 		JPanel submitPanel = new JPanel();
+		JPanel gameState = new JPanel();
+		
 		playerOneOptions.setLayout(new GridBagLayout());
 		playerTwoOptions.setLayout(new GridBagLayout());
 		submitPanel.setLayout(new GridBagLayout());
+		gameState.setLayout(new GridBagLayout());
+		
 		playerOneOptions.setSize(panelSize);
 		playerTwoOptions.setSize(panelSize);
 		submitPanel.setSize(panelSize);
-		
-		System.out.println(playerOneOptions.getSize());
-		System.out.println(playerTwoOptions.getSize());
+		gameState.setSize(panelSize);
 		
 		// Create constraints object for JPanel
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -58,12 +67,11 @@ public class UserInterface extends JFrame {
 		
 		// Create Components needed for player one JPanel
 		JLabel titleOne = new JLabel("Player One (White):");
-		titleOne.setAlignmentX(playerOneOptions.LEFT_ALIGNMENT);
-		JComboBox<String> typeOne = new JComboBox<String>();
-			typeOne.addItem("Human");
+		typeOne = new JComboBox<String>();
 			typeOne.addItem("Random");
+			typeOne.addItem("Human");
 			typeOne.addItem("Aggressive");
-		JTextField nameOne = new JTextField("PlayerOne");
+		nameOne = new JTextField("PlayerOne");
 		
 		// Add these components with constraints
 		constraints.gridx = 0;
@@ -89,11 +97,11 @@ public class UserInterface extends JFrame {
 		
 		// Create Components needed for player one JPanel
 		JLabel titleTwo = new JLabel("Player Two (black):");
-		JComboBox<String> typeTwo = new JComboBox<String>();
+		typeTwo = new JComboBox<String>();
 			typeTwo.addItem("Human");
 			typeTwo.addItem("Random");
 			typeTwo.addItem("Aggressive");
-		JTextField nameTwo = new JTextField("PlayerTwo");
+		nameTwo = new JTextField("PlayerTwo");
 		
 		// Add these components with constraints
 		constraints.gridx = 0;
@@ -114,11 +122,18 @@ public class UserInterface extends JFrame {
 		playerOneOptions.add(nameTwo, constraints);
 		
 		
-		// Finally add Start button
-		JButton startButton = new JButton("Start Game!");
-		
+		// Adding the message area (game state area)
+		gameMessage = new JLabel("Enter options and start the game!");
+		constraints.weightx = 1;
 		constraints.gridx = 0;
 		constraints.gridy = 4;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		gameState.add(gameMessage, constraints);
+		
+		// Finally add Start button
+		startButton = new JButton("Start Game!");
+		constraints.gridx = 0;
+		constraints.gridy = 5;;
 		constraints.weightx = 1;
 		constraints.weighty = 1;
 		constraints.fill = GridBagConstraints.BOTH;
@@ -126,25 +141,9 @@ public class UserInterface extends JFrame {
 		
 		
 		// Adding players options
-		contentPane.add(playerOneOptions);
-		contentPane.add(playerTwoOptions);
-		contentPane.add(submitPanel);
-		
-		
-		// Last settings - packing components
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pack();
-		setResizable(false);
-		setVisible(true);
-		
-		
-		System.out.println(contentPane.getSize());
-		
-	
-	}
-	
-	public static void main(String[] args){
-		
-		UserInterface ui = new UserInterface(500);
+		add(playerOneOptions);
+		add(playerTwoOptions);
+		add(gameState);
+		add(submitPanel);	
 	}
 }
