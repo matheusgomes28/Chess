@@ -1,8 +1,5 @@
 package aca14md;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 /*
  * This class was created to group up
  * all the listener code that goes into
@@ -14,6 +11,10 @@ import java.awt.event.MouseEvent;
  * Written By: Matheus Gomes
  * Last Editted: 12/05/2015
  */
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 public class PieceListeners {
 	
 	// Hold the currently selected piece in the GUI

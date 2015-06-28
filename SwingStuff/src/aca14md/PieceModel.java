@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 /*
@@ -15,6 +16,10 @@ import javax.swing.JPanel;
  * actions. Data in this case is the
  * pieces of a player and the cell holder
  * of JPanels that can change state.
+ * 
+ * Lecturer: Rihard Clayton
+ * Written By: Matheus Gomes
+ * Last Edited: 12/05/2015
  */
 public class PieceModel {
 	
@@ -74,7 +79,8 @@ public class PieceModel {
 			
 			
 			// Change colour to green
-			cellHolder[y][x].setBackground(Color.GREEN);
+			cellHolder[y][x].setBackground(new Color(127, 95, 39));
+			cellHolder[y][x].setBorder(BorderFactory.createLineBorder(Color.WHITE));
 			cellHolder[y][x].revalidate();
 			cellHolder[y][x].repaint();
 		}
@@ -100,11 +106,18 @@ public class PieceModel {
 			
 			// Change colour to normal
 			// Change colour of this panel
-			if((x+y) % 2 == 1)
-				cellHolder[y][x].setBackground(new Color(130, 82, 1));
-			else
-				cellHolder[y][x].setBackground(new Color(255, 189, 78));
+			Color cellColor;
+			if((x+y) % 2 == 1){
+				cellColor = new Color(130, 82, 1);
+				cellHolder[y][x].setBackground(cellColor);
+			}
+			else{
+				cellColor = new Color(255, 189, 78);
+				cellHolder[y][x].setBackground(cellColor);
+			}
 			
+			// Removing border and repaint
+			cellHolder[y][x].setBorder(BorderFactory.createLineBorder(cellColor));
 			cellHolder[y][x].revalidate();
 			cellHolder[y][x].repaint();
 			

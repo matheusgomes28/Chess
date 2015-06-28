@@ -15,14 +15,18 @@ import javax.swing.JPanel;
  * HumanPlayer and GraphicalDisplay
  * classes, as well as helping to
  * make a move using the GUI.
+ * 
+ * Lecturer: Richard Clayton
+ * Written By: Matheus Gomes
+ * LAst Edited: 14/05/2015
  */
 public class PieceController {
 	
 	// Variables to hold the view and model
-	private GraphicalDisplay view;
+	private BoardGUI view;
 	private PieceModel model;
 	
-	public PieceController(PieceModel model, GraphicalDisplay view){
+	public PieceController(PieceModel model, BoardGUI view){
 		// Settings the instance variables
 		this.view = view;
 		this.model = model;
@@ -62,7 +66,14 @@ public class PieceController {
 		}
 	}
 	
-	// COMMENT ON PIECES HERE
+	/**
+	 * This method will be used to add
+	 * mouse listeners to every JLabel
+	 * that represents this player's 
+	 * pieces on the board
+	 * @param myPieces the pieces object that holds
+	 * a HumanPlayer's pieces (that were clickable).
+	 */
 	public void removePieceListeners(Pieces myPieces){
 		
 		// Get the JPanel cellHolder
@@ -100,26 +111,31 @@ public class PieceController {
 	 * This method uses the model and the
 	 * view to get a valid move string 
 	 * from the player.
-	 * @return
+	 * @return a move string (containing positions)
 	 */
 	public String getMoveString(){
+		
+		// Add listeners to players pieces
 		addPieceListeners(model.getPieces());
 		
+		// TRY WITH SEMAPORES
 		while(model.getMoveString().length() < 4){
 			try {
 				Thread.sleep(5);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		
 		String input = model.getMoveString();
-		model.setMoveString("");
+		model.setMoveString(""); // Reset move string
 		
 		if(model.getSelectedPiece() != null)
 			model.unselectMoves(model.getSelectedPiece());
 		
+		
+		// Remove listeners of piece so they can't be selected
+		// by opponent
 		removePieceListeners(model.getPieces());
 		
 		return input;

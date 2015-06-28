@@ -1,4 +1,14 @@
 package aca14md;
+/*
+ * This class represents a random AI
+ * player in the chess game. It moves
+ * by selecting a random available
+ * move of the player.
+ * 
+ * Lecturer: Richard Clayton
+ * Writtten By: Matheus Gomes
+ * Last Edited: 02/05/2015
+ */
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -29,7 +39,11 @@ public class RandomPlayer extends Player {
 		return true;
 	}
 	
-	
+	/**
+	 * This method makes the move of a given
+	 * move object. Useful for children classes
+	 * @param m The move object to be made
+	 */
 	public void makeMove(Move m){
 		// Get information from move
 		int xTo = m.getXTo(),

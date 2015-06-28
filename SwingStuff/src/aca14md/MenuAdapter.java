@@ -1,10 +1,13 @@
 package aca14md;
 
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.Semaphore;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /*
  * This class is serving as an adapter
@@ -65,6 +68,10 @@ public class MenuAdapter {
 	 * object for the seconds player 
 	 * depending on what the user has
 	 * selected on the menu.
+	 * @param piece The pieces object that will be
+	 * used to create the player.
+	 * @param board The board object that represents
+	 * the game being played.
 	 * @return A new Player object.
 	 */
 	public Player getPlayerTwo(Pieces pieces, Board board){
@@ -90,6 +97,35 @@ public class MenuAdapter {
 		
 	}
 	
+	/*
+	 * This method will get the delay in miliseconds
+	 * from the user menu.
+	 */
+	public int getDelay(){
+		
+		// get selected option and format string
+		String input = menu.getDelayBox().getSelectedItem().toString();
+		input = input.toLowerCase().trim();
+		
+		// Get int corresponding to input
+		if(input.equals("none"))
+			return 0;
+		else if(input.equals("0.5 second"))
+			return 500;
+		else if(input.equals("1 second"))
+			return 1000;
+		else
+			System.out.println("input error on delay");
+		
+		return 0;
+	}
+	
+	/**
+	 * This method changes the message on the
+	 * menu.
+	 * @param message The message to be changed
+	 * to.
+	 */
 	public void setMessage(String message){
 		
 		// getting label that shows message in menu
@@ -100,20 +136,24 @@ public class MenuAdapter {
 	
 	/**
 	 * This method just uses a semaphore
-	 * to wait for the start button
+	 * to wait for the start/reset button
 	 * to be clicked in the menu.
 	 */
-	public void waitStartButton(){
+	public void waitCurrentButton(){
 		
 		// Semaphore using to wait for action performed
 		Semaphore semaphore = new Semaphore(0);
 		
 		// Add listener to button that releases semaphore
-		menu.getStartButton().addActionListener(new ActionListener(){
+		JButton button = menu.getCurrentButton();
+		
+		// Add listener that waits
+		button.addActionListener(new ActionListener(){
 
 			// Just used to release semaphore
 			public void actionPerformed(ActionEvent e) {
 				semaphore.release();
+				menu.getButtonArea().removeAll();
 			}});
 		
 		// Handles exception
@@ -123,5 +163,56 @@ public class MenuAdapter {
 			System.out.println("Concurrency error, report:");
 			e1.printStackTrace();
 		}
+	}
+	
+	/**
+	 * This method just adds the reset and
+	 * button to the menu.
+	 */
+	public void addResetButton(){
+		// references needed
+		JPanel area = menu.getButtonArea();
+		area.removeAll();
+		GridBagConstraints constraints = new GridBagConstraints();
+		
+		// The two buttons to be added
+		JButton resetBoard = new JButton("Reset Board");
+		
+		// Adding button with constraints
+		constraints.weightx = 1;
+		constraints.gridy = 5;
+		constraints.gridx = 0;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		area.add(resetBoard, constraints);
+		
+		// Repaint area
+		area.revalidate();
+		area.repaint();
+	}
+	
+	/*
+	 * This method just adds the start button
+	 * to the user menu.
+	 */
+	public void addStartButton(){
+		
+		// references needed
+		JPanel area = menu.getButtonArea();
+		area.removeAll();
+		GridBagConstraints constraints = new GridBagConstraints();
+		
+		// The two buttons to be added
+		JButton startButton = new JButton("Start Game");
+		
+		// Adding button with constraints
+		constraints.weightx = 1;
+		constraints.gridy = 5;
+		constraints.gridx = 0;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		area.add(startButton, constraints);
+		
+		// Repaint area
+		area.revalidate();
+		area.repaint();
 	}
 }

@@ -1,5 +1,14 @@
 package aca14md;
-
+/*
+ * This class represents an aggressive player
+ * in the game. It inherits from random player
+ * because it also makes random moves when
+ * no piece can be taken.
+ * 
+ * Lecturer: Richard Clayton
+ * Written By: Matheus Gomes
+ * Last Edited: 02/05/2015
+ */
 import java.util.ArrayList;
 
 public class AggressivePlayer extends RandomPlayer {
@@ -8,16 +17,21 @@ public class AggressivePlayer extends RandomPlayer {
 		super(n, p, b, o);
 	}
 	
-	
+	/**
+	 * Makes a move by selecting the move
+	 * containing the highest ranked 
+	 * piece. If no piece can be taken
+	 * then a random move is done
+	 */
 	public boolean makeMove(){
 		
 		// Get all possible moves
 		ArrayList<Move> allMoves = getLegalMoves();
 		
-		// No moes available;
+		// No moves available;
 		if(allMoves == null) return false;
 		
-		// Var to store the best possible move
+		// Variable to store the best possible move
 		Move bestMove = null;
 	
 		for(Move move : allMoves){

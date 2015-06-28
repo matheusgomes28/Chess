@@ -62,6 +62,12 @@ public abstract class Player {
     return name;
   }
   
+  	/*
+  	 * This method gets all the
+  	 * legal moves of a player by
+  	 * checking if, after the move
+  	 * has been made, the user is not in check.
+  	 */
   	public ArrayList<Move> getLegalMoves(){
   		
   		// All moves found in all pieces
@@ -93,10 +99,11 @@ public abstract class Player {
   		else return allMoves;
   	}
 
-  	
+  	/*
+  	 * This detects whether or not the use
+  	 * is in check.
+  	 */
   	public boolean isCheck(Piece taken){
-  		
-  		System.out.println(taken);
   		
   		// Get opponents available piece
   		Pieces oPieces = getOpponent().getPieces();
@@ -127,6 +134,12 @@ public abstract class Player {
   		return false;
   	}
   	
+  	
+  	/*
+  	 * This method detects whether or not the
+  	 * player is in checkmate by checking if he
+  	 * has available moves or not.
+  	 */
   	public boolean isMate(){
   		
   		// Get the available moves

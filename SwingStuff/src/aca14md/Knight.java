@@ -1,4 +1,14 @@
 package aca14md;
+/*
+ * Simple class that represents
+ * a knight piece in a chess 
+ * game. Made for the java 
+ * assignment UoS.
+ * 
+ * Lecturer: Richard Clayton
+ * Written By: Matheus Gomes
+ * Last Edited: Unknown
+ */
 import java.util.ArrayList;
 
 public class Knight extends Piece {

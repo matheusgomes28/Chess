@@ -1,5 +1,15 @@
 package aca14md;
-
+/* 
+ * This class represents a move
+ * in the game of chess. It's one
+ * of the most important classes as its
+ * needed for check detection, making a move
+ * and simply storing moves of a player.
+ * 
+ * Lecturer: Richard Clayton
+ * Written By: Matheus Gomes
+ * Last Edited: 01/05/2015
+ */
 public class Move {
 	
 	// Declare position variables
@@ -27,29 +37,16 @@ public class Move {
 		occupied = o;
 	}
 	
-	public int getXFrom(){
-		return xFrom;
-	}
+	// Get methods needed
 	
-	public int getYFrom(){
-		return yFrom;
-	}
-
-	public int getXTo(){
-		return xTo;
-	}
+	public int getXFrom(){return xFrom;}
+	public int getYFrom(){return yFrom;}
+	public int getXTo(){return xTo;}
+	public int getYTo(){return yTo;}
+	public Piece getPieceTaken(){return pTaken;}
 	
-	public int getYTo(){
-		return yTo;
-	}
+	public void setPieceTaken(Piece pTaken){this.pTaken = pTaken;}
 	
-	public void setPieceTaken(Piece pTaken){
-		this.pTaken = pTaken;
-	}
-	
-	public Piece getPieceTaken(){
-		return pTaken;
-	}
 	
 	/**
 	 * This method checks whether the position
@@ -104,6 +101,14 @@ public class Move {
 		
 	}
 	
+	/*
+	 * Carries out a move, but also sets
+	 * the piece taken by the move. Useful
+	 * for check detection (only use when
+	 * piece is taken).
+	 * 
+	 * @param pTaken The piece taken by the move
+	 */
 	public void carryOutMove(Piece pTaken){
 		
 		// Set piece that was taken
@@ -113,6 +118,11 @@ public class Move {
 		carryOutMove();
 	}
 	
+	/*
+	 * This method undoes the move
+	 * by setting positions and pieces back to 
+	 * their original places.
+	 */
 	public void undoMove(){
 		// Get objects for readability purposes
 		Piece pMoved = getPiece();
